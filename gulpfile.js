@@ -9,9 +9,6 @@ function getSource(source) {
 	switch (source) {
         case 'ajax':
             return 'src/js/ajax.js';
-        case 'manipulation':
-            source = ['src/js/select.js', 'src/js/manipulation.js'];
-            break;
         case 'selection':
             source = 'src/js/select.js';
             break;
