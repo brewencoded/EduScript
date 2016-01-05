@@ -3,9 +3,9 @@ describe('$', function () {
 		expect($).toBeDefined();
 	});
 
-	describe('$.get', function () {
-		it('exits', function () {
-			expect($.get).toBeDefined();
+	describe('$.elem', function () {
+		it('exists', function () {
+			expect($.elem).toBeDefined();
 		});
 	});
 
