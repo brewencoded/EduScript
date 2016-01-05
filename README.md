@@ -39,3 +39,5 @@ Now install with ` npm install `
 Navigate to the base directory in your terminal ` cd path/to/folder `, then run ` gulp `. This should open a new browser tab and run the program with all libraries added. The JS files are being watched and tests will automatically run.
 
 Pass commandline options if you want to isolate specific portions of the library: ` gulp --libs  ajax ` or ` gulp --libs  selection `
+
+Now you can use the library to make calls from withing the DOM using the console.
