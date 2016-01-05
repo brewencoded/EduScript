@@ -29,7 +29,7 @@ npm install -g gulp
 
 Clone this repository and navigate into it 
 ``` 
-git clone https://github.com/vrodriguez363/ng-express-gulp.git && cd ng-express-gulp
+git clone https://github.com/vrodriguez363/mimic.git && cd mimic
 ```
 
 Now install with ` npm install `
