@@ -47,7 +47,7 @@ gulp.task('test', function (done) {
 /// Sass
 ///////////////////////////////////////////////////
 gulp.task('sass', function() {
-    gulp.src('src/scss/style.scss')
+    return gulp.src('src/scss/style.scss')
         .pipe(plumber())
         .pipe(sourcemaps.init())
         .pipe(sass())
@@ -63,7 +63,7 @@ gulp.task('sass', function() {
 /// HTML
 ///////////////////////////////////////////////////
 gulp.task('html', function() {
-    gulp.src('src/index.html')
+    return gulp.src('src/index.html')
         .pipe(plumber())
         .pipe(gulp.dest('dist/'));
 });
@@ -88,7 +88,7 @@ gulp.task('js', ['test'], function() {
         	}
         }
     }
-    gulp.src(source)
+    return gulp.src(source)
         .pipe(plumber())
         .pipe(sourcemaps.init())
         .pipe(stripCode({
@@ -101,19 +101,23 @@ gulp.task('js', ['test'], function() {
         .pipe(gulp.dest('dist/js'));
 });
 
+gulp.task('js-watch', ['js'], function () {
+	browserSync.reload();
+});
+
 ///////////////////////////////////////////////////
 /// Browser-sync
 ///////////////////////////////////////////////////
-gulp.task('browser-sync', function () {
+gulp.task('browser-sync', ['sass', 'js', 'html'], function () {
 	browserSync.init({
         server: './dist'
     });
 
-    gulp.watch('src/js/*.js', ['js']).on('change', browserSync.reload);
+    gulp.watch('src/js/**/*.js', ['js-watch']);
     gulp.watch('src/scss/*.scss', ['sass']);
     gulp.watch('src/index.html', ['html']).on('change', browserSync.reload);
     gulp.watch('tests/**/*.js', ['test']);
 });
 
 // You can have selection or ajax by itself. Manipulation depends on selection.
-gulp.task('default', ['sass', 'js', 'html', 'browser-sync']);
+gulp.task('default', ['browser-sync']);
