@@ -1,6 +1,12 @@
 //TODO: implement off, append, remove, click, extend 
 
 var $ = (function($) {
+
+	function NoSuchEventException(message) {
+		this.name = 'NoSuchEventException';
+		this.message = message;
+	}
+
     ////////////////////////////////////////////////////////////////////////////////////////////
     /// Utility Functions
     ////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,7 +96,7 @@ var $ = (function($) {
             }
         }
         if (tag === 'input' || tag === 'select') {
-            existingElement = new Input(attrs);
+            existingElement = new Input(attrs, node);
         } else {
             existingElement = new Element(tag, attrs, node);
         }
@@ -136,11 +142,33 @@ var $ = (function($) {
     };
     /**
      * remove event handler from element
-     * @param  {string} event - event name
+     * @param {string} event  - event name
+     * @param {Function} fn   - function to remove
      * @return {Object}         returns element object
      */
-    Element.prototype.off = function(event) {
-
+    Element.prototype.off = function(event, fn) {
+        var handlers = [];
+        var i = this.listeners.length, ii;
+        while(i--) { //loop backwards. splice redefines array indexes
+        	if (this.listeners[i].event === event) {
+                handlers.push(this.listeners[i].handler);
+                this.listeners.splice(i, 1); //remove element from array
+            }
+        }
+        if (fn) {
+        	this.node.removeEventListener(event, fn);
+        } else {
+        	if (handlers.length === 0) {
+        		throw new NoSuchEventException('Event is not present in element');
+        	} else if (handlers.length === 1) {
+        		this.node.removeEventListener(event, handlers[0]);
+        	} else {
+        		for(ii in handlers) {
+        			this.node.removeEventListener(event, handlers[ii]);
+        		}
+        	}
+        }
+        
         return this; //method chaining
     };
     /**
@@ -185,13 +213,13 @@ var $ = (function($) {
      * Constructor for Input type. Inherits from Element
      * @param {Object} attrs - attributes to pass to parent
      */
-    function Input(attrs) {
-        Element.call(this, 'input', attrs);
+    function Input(attrs, node) {
+        Element.call(this, 'input', attrs, node);
         this.value = '';
         Input.prototype.eventTypes = this.eventTypes.concat(['input', 'change']);
 
-        this.node.addEventListener('keyup', function (e) {
-        	this.value = e.target.value;
+        this.node.addEventListener('keyup', function(e) {
+            this.value = e.target.value;
         }.bind(this));
 
     }
@@ -239,7 +267,8 @@ var $ = (function($) {
         getTag: getTag,
         getAttrs: getAttrs,
         Element: Element,
-        Input: Input
+        Input: Input,
+        NoSuchEventException: NoSuchEventException
     };
     //bind polyfill - PhantomJS does not include bind()
     if (!Function.prototype.bind) {
