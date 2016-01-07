@@ -145,14 +145,14 @@ describe('selection', function() {
                 expect(div.listeners[0]).toBeDefined();
                 expect(div.listeners[0].handler).toEqual(jasmine.any(Function));
             });
-            /*it('should remove events from instance and element', function() {
+            it('should remove events from instance and element', function() {
                 div.on('click', function() {
                     window.successfullyTriggeredEvent = true;
                 });
                 div.off('click');
                 expect(div.listeners.length).toBe(0);
                 expect(div.listeners[0]).not.toBeDefined();
-            });*/
+            });
             it('should execute event', function() {
                 div.on('click', function() {
                     window.successfullyTriggeredEvent = true;
