@@ -1,11 +1,15 @@
-//TODO: implement off, append, remove, click, extend 
+//TODO: implement append, remove, click, extend 
 
 var $ = (function($) {
-
-	function NoSuchEventException(message) {
-		this.name = 'NoSuchEventException';
-		this.message = message;
-	}
+    /**
+     * Error to be thrown when no matching event is found on Element
+     */
+    function NoSuchEventException(message) {
+        this.name = 'NoSuchEventException';
+        this.message = message;
+        this.stack = (new Error()).stack;
+    }
+    NoSuchEventException.prototype = Object.create(Error.prototype);
 
     ////////////////////////////////////////////////////////////////////////////////////////////
     /// Utility Functions
@@ -124,90 +128,98 @@ var $ = (function($) {
             this.node = this.createNode();
         }
     }
-    Element.prototype.eventTypes = ['click', 'blur', 'hover', 'keyup', 'focus', 'keydown', 'mouseup', 'mousedown', 'mouseleave', 'scroll'];
-    /**
-     * add event handler to element
-     * @param  {string} event     - event name
-     * @param  {Function} handler - function to use on event
-     * @return {Object}             returns element object
-     */
-    Element.prototype.on = function(event, handler) {
-        this.node.addEventListener(event, handler);
-        this.listeners.push({
-            event: event,
-            handler: handler
-        });
-
-        return this; //method chaining
-    };
-    /**
-     * remove event handler from element
-     * @param {string} event  - event name
-     * @param {Function} fn   - function to remove
-     * @return {Object}         returns element object
-     */
-    Element.prototype.off = function(event, fn) {
-        var handlers = [];
-        var i = this.listeners.length, ii;
-        while(i--) { //loop backwards. splice redefines array indexes
-        	if (this.listeners[i].event === event) {
-                handlers.push(this.listeners[i].handler);
-                this.listeners.splice(i, 1); //remove element from array
-            }
-        }
-        if (fn) {
-        	this.node.removeEventListener(event, fn);
-        } else {
-        	if (handlers.length === 0) {
-        		throw new NoSuchEventException('Event is not present in element');
-        	} else if (handlers.length === 1) {
-        		this.node.removeEventListener(event, handlers[0]);
-        	} else {
-        		for(ii in handlers) {
-        			this.node.removeEventListener(event, handlers[ii]);
-        		}
-        	}
-        }
-        
-        return this; //method chaining
-    };
-    /**
-     * Gets or sets attribute of element
-     * @param  {string} attr  - attribute to set or get
-     * @param  {string} value - value to change attribute to
-     * @return {Object}         returns Node object
-     */
-    Element.prototype.attr = function(attr, value) {
-        if (value) {
-            this.attrs[attr] = value;
+    Element.prototype = {
+        eventTypes: ['click', 'blur', 'hover', 'keyup', 'focus', 'keydown', 'mouseup', 'mousedown', 'mouseleave', 'scroll'],
+        /**
+         * add event handler to element
+         * @param  {string} event     - event name
+         * @param  {Function} handler - function to use on event
+         * @return {Object}             returns element object
+         */
+        on: function(event, handler) {
+            this.node.addEventListener(event, handler);
+            this.listeners.push({
+                event: event,
+                handler: handler
+            });
 
             return this; //method chaining
-        } else {
-
-            return this.attrs[attr];
-        }
-    };
-    /**
-     * Creates Node object 
-     * @return {Object} Node object
-     */
-    Element.prototype.createNode = function() {
-        var node = document.createElement(this.tag);
-        for (var key in this.attrs) {
-            if (this.attrs.hasOwnProperty(key)) {
-                node.setAttribute(key, this.attrs[key]);
+        },
+        /**
+         * remove event handler from element
+         * @param {string} event  - event name
+         * @param {Function} fn   - function to remove
+         * @return {Object}         returns element object
+         */
+        off: function(event, fn) {
+            var handlers = [];
+            var i = this.listeners.length,
+                ii;
+            while (i--) { //loop backwards. splice redefines array indexes
+                if (this.listeners[i].event === event) {
+                    handlers.push(this.listeners[i].handler);
+                    this.listeners.splice(i, 1); //remove element from array
+                }
             }
+            if (fn) {
+                this.node.removeEventListener(event, fn);
+            } else {
+                if (handlers.length === 0) {
+                    throw new NoSuchEventException('Event is not present in element');
+                } else if (handlers.length === 1) {
+                    this.node.removeEventListener(event, handlers[0]);
+                } else {
+                    for (ii in handlers) {
+                        this.node.removeEventListener(event, handlers[ii]);
+                    }
+                }
+            }
+
+            return this; //method chaining
+        },
+        append: function() {
+
+        },
+
+        /**
+         * Gets or sets attribute of element
+         * @param  {string} attr  - attribute to set or get
+         * @param  {string} value - value to change attribute to
+         * @return {Object}         returns Node object
+         */
+        attr: function(attr, value) {
+            if (value) {
+                this.attrs[attr] = value;
+
+                return this; //method chaining
+            } else {
+
+                return this.attrs[attr];
+            }
+        },
+        /**
+         * Creates Node object 
+         * @return {Object} Node object
+         */
+        createNode: function() {
+            var node = document.createElement(this.tag);
+            for (var key in this.attrs) {
+                if (this.attrs.hasOwnProperty(key)) {
+                    node.setAttribute(key, this.attrs[key]);
+                }
+            }
+
+            return node;
+        },
+        /**
+         * Gets the node representation of the object
+         * @return {Object} Node
+         */
+        getNode: function() {
+
+            return this.node;
         }
 
-        return node;
-    };
-    /**
-     * Gets the node representation of the object
-     * @return {Object} Node
-     */
-    Element.prototype.getNode = function() {
-
-        return this.node;
     };
     /**
      * Constructor for Input type. Inherits from Element
@@ -226,6 +238,7 @@ var $ = (function($) {
 
 
     Input.prototype = Object.create(Element.prototype);
+    Input.prototype.constructor = Input;
 
     ////////////////////////////////////////////////////////////////////////////////////////////
     /// Inititializers

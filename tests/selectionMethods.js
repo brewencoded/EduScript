@@ -175,7 +175,7 @@ describe('selection', function() {
             it('should throw error if event does not exist', function () {
             	expect(function() { 
 					div.off('click'); 
-				}).toThrow();
+				}).toThrowError($.test.NoSuchEventException);
             });
         });
     });
