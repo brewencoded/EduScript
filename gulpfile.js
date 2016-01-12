@@ -110,7 +110,8 @@ gulp.task('js-watch', ['js'], function () {
 ///////////////////////////////////////////////////
 gulp.task('browser-sync', ['sass', 'js', 'html'], function () {
 	browserSync.init({
-        server: './dist'
+        server: './dist',
+        port: 8087
     });
 
     gulp.watch('src/js/**/*.js', ['js-watch']);
