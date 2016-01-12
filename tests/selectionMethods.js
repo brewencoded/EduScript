@@ -44,6 +44,13 @@ describe('selection', function() {
         });
     });
 
+    describe('getText', function () {
+    	it('should get text inbetween tag', function () {
+    		var htmlStr = '<p>This is some text</p>';
+    		expect($.test.getText(htmlStr)).toBe('This is some text');
+    	});
+    });
+
     describe('$.elem', function() {
         var $elem;
         beforeEach(function() {
@@ -178,6 +185,68 @@ describe('selection', function() {
 				}).toThrowError($.test.NoSuchEventException);
             });
         });
+
+        describe('append', function () {
+        	var div;
+        	beforeEach(function () {
+        		document.body.appendChild($elem.getNode());
+        		div = $.elem('#myId');
+        	});
+        	afterEach(function () {
+        		document.body.removeChild($elem.getNode());
+        	});
+
+        	it('should convert an html string to html and append it', function () {
+        		div.append('<p>Hello</p>');
+        		expect(div.getNode().childNodes[0]).toBeDefined();
+        	});
+
+        	it('should append an Element to an html element', function () {
+        		var appendee = $.elem('<p>Hello</p>');
+        		div.append(appendee);
+        		expect(div.getNode().childNodes[0]).toBeDefined();
+        	});
+
+        	it('should append a Node to an html element', function () {
+        		var appendee = document.createElement('p');
+        		appendee.appendChild(document.createTextNode('Hello'));
+        		div.append(appendee);
+        		expect(div.getNode().childNodes[0]).toBeDefined();
+        	});
+
+        	it('should append a plain string html element', function () {
+        		div.append('Hello');
+        		expect(div.getNode().childNodes[0]).toBeDefined();
+        	});
+        });
     });
+
+	describe('$.extend', function () {
+		it('should take multiple object arguments and return a single merge object', function () {
+			var one = {
+				a: 'A'
+			};
+			var two = {
+				b: 'B',
+				c: 'C'
+			};
+			var three = {
+				d: 'D',
+				e: 'E',
+				f: 'F'
+			};
+
+			var expected = {
+				a: 'A',
+				b: 'B',
+				c: 'C',
+				d: 'D',
+				e: 'E',
+				f: 'F'
+			};
+			var merged = $.extend(one, two, three);
+			expect(merged).toEqual(expected);
+		});
+	});
 
 });

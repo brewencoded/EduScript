@@ -1,4 +1,4 @@
-//TODO: implement append, remove, click, extend 
+//TODO: implement extend 
 
 var $ = (function($) {
     /**
@@ -11,8 +11,15 @@ var $ = (function($) {
     }
     NoSuchEventException.prototype = Object.create(Error.prototype);
 
+    function NotUseableHtmlObjectException(message) {
+        this.name = 'NotUseableHtmlObjectException';
+        this.message = message;
+        this.stack = (new Error()).stack;
+    }
+    NotUseableHtmlObjectException.prototype = Object.create(Error.prototype);
+
     ////////////////////////////////////////////////////////////////////////////////////////////
-    /// Utility Functions
+    /// Private Utility Functions
     ////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -64,6 +71,19 @@ var $ = (function($) {
         return attrObj;
     }
     /**
+     * Strips text content from tag
+     * @param  {string} str - html string
+     * @return {string}     text from inside of tag
+     */
+    function getText(str) {
+        var first = str.indexOf('>');
+        first++;
+        var last = str.indexOf('<', 1);
+        var text = str.slice(first, last);
+
+        return text;
+    }
+    /**
      * Searches DOM using CSS selectors
      * @param  {string} selector     - selector to use in search
      * @return {Object|Object[]|false} Element or Element[] representing element(s) found or false if no match
@@ -93,6 +113,7 @@ var $ = (function($) {
     function createExistingElement(node) {
         var tag = node.tagName;
         var attrs = {};
+        var content = node.childNodes[0];
         var existingElement;
         for (var attr in node.attributes) {
             if (node.attributes.hasOwnProperty(attr)) {
@@ -102,7 +123,12 @@ var $ = (function($) {
         if (tag === 'input' || tag === 'select') {
             existingElement = new Input(attrs, node);
         } else {
-            existingElement = new Element(tag, attrs, node);
+            if (content !== '' && content !== undefined) {
+                existingElement = new Element(tag, attrs, node, content);
+            } else {
+                existingElement = new Element(tag, attrs, node);
+            }
+
         }
 
         return existingElement;
@@ -118,7 +144,7 @@ var $ = (function($) {
      * @param {Object} attrs - map of attributes and values
      * @param {Object} node  - node to initialize object with
      */
-    function Element(tag, attrs, node) {
+    function Element(tag, attrs, node, content) {
         this.tag = tag;
         this.attrs = attrs;
         this.listeners = [];
@@ -126,6 +152,9 @@ var $ = (function($) {
             this.node = node;
         } else {
             this.node = this.createNode();
+        }
+        if (content) {
+            this.node.appendChild(document.createTextNode(content));
         }
     }
     Element.prototype = {
@@ -177,8 +206,32 @@ var $ = (function($) {
 
             return this; //method chaining
         },
-        append: function() {
+        /**
+         * Appends argument to the Element this method is invoked on
+         * @param  {string|Object} elementOrString - Either a string, Element, or Node
+         * @return {Object}                 		 returns Element
+         */
+        append: function(elementOrString) {
+            if (typeof elementOrString === 'string') {
+                if (isHTML(elementOrString)) {
+                    var elem = $.elem(elementOrString);
+                    this.node.appendChild(elem.getNode());
+                } else {
+                    this.node.appendChild(document.createTextNode(elementOrString));
+                }
 
+            } else {
+
+                if (elementOrString instanceof Element) {
+                    this.node.appendChild(elementOrString.getNode());
+                } else if (elementOrString instanceof Node) {
+                    this.node.appendChild(elementOrString);
+                } else {
+                    throw new NotUseableHtmlObjectException('The value is not a valid html string, Node, or Element');
+                }
+            }
+
+            return this; //method chaining woot!
         },
 
         /**
@@ -218,8 +271,16 @@ var $ = (function($) {
         getNode: function() {
 
             return this.node;
-        }
+        },
+        /**
+         * Removes the node from the DOM
+         * @return {Object} reference to the removedd object as an Element
+         */
+        remove: function() {
+            this.node.parentNode.removeChild(this.node);
 
+            return this;
+        }
     };
     /**
      * Constructor for Input type. Inherits from Element
@@ -227,7 +288,7 @@ var $ = (function($) {
      */
     function Input(attrs, node) {
         Element.call(this, 'input', attrs, node);
-        this.value = '';
+        this.value = attrs.value | '';
         Input.prototype.eventTypes = this.eventTypes.concat(['input', 'change']);
 
         this.node.addEventListener('keyup', function(e) {
@@ -241,6 +302,39 @@ var $ = (function($) {
     Input.prototype.constructor = Input;
 
     ////////////////////////////////////////////////////////////////////////////////////////////
+    /// Public Utility Functions
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Variadic function. Takes multiple objects and combines them into a single  object. shallow merge.
+     * @return {Object} merged objects
+     */
+    $.extend = function() {
+
+        // Variables
+        var extended = {};
+        var i;
+        var length = arguments.length; //arguments has pretty bad performance, don't overuse it
+
+        // Merge the object into the extended object
+        var merge = function(obj) {
+            for (var prop in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, prop)) {
+                        extended[prop] = obj[prop];
+                }
+            }
+        };
+
+        // Loop through each object and conduct a merge
+        for (i = 0; i < length; i++) {
+            var obj = arguments[i];
+            merge(obj);
+        }
+
+        return extended;
+    };
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////
     /// Inititializers
     ////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -252,6 +346,7 @@ var $ = (function($) {
     $.elem = function(str) {
         var attrs;
         var tag;
+        var content;
         if (isHTML(str)) {
             if (getTag(str) === 'input') {
                 attrs = getAttrs(str);
@@ -260,8 +355,9 @@ var $ = (function($) {
             } else {
                 tag = getTag(str);
                 attrs = getAttrs(str);
+                content = getText(str);
 
-                return new Element(tag, attrs);
+                return new Element(tag, attrs, null, content);
             }
         } else {
 
@@ -279,6 +375,7 @@ var $ = (function($) {
         isHTML: isHTML,
         getTag: getTag,
         getAttrs: getAttrs,
+        getText: getText,
         Element: Element,
         Input: Input,
         NoSuchEventException: NoSuchEventException
