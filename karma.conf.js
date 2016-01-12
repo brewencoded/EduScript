@@ -9,5 +9,6 @@ module.exports = function(config) {
       'src/js/**/*.js',
       'tests/*.js'
     ]
+
   });
 };
