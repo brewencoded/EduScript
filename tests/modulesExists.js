@@ -19,11 +19,11 @@ describe('$', function () {
 		it('exists', function () {
 			expect($.test).toBeDefined();
 		});
+	});
 
-		describe('isHTML', function () {
-			it('exists', function () {
-				expect($.test.isHTML).toBeDefined();
-			});
+	describe('$.extend', function () {
+		it('exists', function () {
+			expect($.extend).toBeDefined();
 		});
 	});
 });
