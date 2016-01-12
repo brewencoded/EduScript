@@ -1,22 +1,21 @@
 # mimic
-Recreation of small functionality in the jQuery library
+Recreation of small functionality in the jQuery library. 
 
 ### About
 This library was built for two reasons.
 * I wanted to use this project to display JavaScript Design Patterns for educational use
 * I wanted to show some general best practices for developing JavaScript modules
 
-When you look at this project you'll see plenty of comments and very descriptive variable names. On top of this, there will be a full article on the step by step process of creating this project. I will show why I made certain decisions and explain the process I used to make those decisions. If errors were made I'll provide explanations and solutions. The best part of this project, is that it isn't just another Todo app. This is a more realistic project, giving a better idea of how to implement the abstract concepts we all learn as JavaScript developers. 
+What you you will notice quickly when you see this code is that it differs slightly from the jquery syntax. This is because jQuery is designed using a Factory design pattern and this is built to illustrate classical inheritance. When you look at this project you'll see plenty of comments and very descriptive variable names. On top of this, there will be a full article on the step by step process of creating this project. I will show why I made certain decisions and explain the process I used to make those decisions. If errors were made I'll provide explanations and solutions. The best part of this project, is that it isn't just another Todo app. This is a more realistic project, giving a better idea of how to implement the abstract concepts we all learn as JavaScript developers. 
 
 This main learning points of this project are:
 * Test Driven Development (TDD)
 * Build and test automation with Gulp.js
 * Code Conventions
-* Module Design Patterns and Obeject Oriented Programming (OOP)
+* Module Design Patterns and Classical Inheritance
 * Improving workflow (e.g. Sass, git)
 * Semantic Versioning (Eventually)
 * Continous Integration (Maybe)
-
 
 ### Installation
 
