@@ -1,5 +1,3 @@
-//TODO: implement extend 
-
 var $ = (function($) {
     /**
      * Error to be thrown when no matching event is found on Element
@@ -115,6 +113,7 @@ var $ = (function($) {
         var attrs = {};
         var content = node.childNodes[0];
         var existingElement;
+
         for (var attr in node.attributes) {
             if (node.attributes.hasOwnProperty(attr)) {
                 attrs[node.attributes[attr].name] = node.attributes[attr].value;
@@ -130,7 +129,7 @@ var $ = (function($) {
             }
 
         }
-
+        console.log(existingElement);
         return existingElement;
     }
 
@@ -225,6 +224,7 @@ var $ = (function($) {
                 if (elementOrString instanceof Element) {
                     this.node.appendChild(elementOrString.getNode());
                 } else if (elementOrString instanceof Node) {
+                    console.log(elementOrString);
                     this.node.appendChild(elementOrString);
                 } else {
                     throw new NotUseableHtmlObjectException('The value is not a valid html string, Node, or Element');
@@ -319,7 +319,7 @@ var $ = (function($) {
         var merge = function(obj) {
             for (var prop in obj) {
                 if (Object.prototype.hasOwnProperty.call(obj, prop)) {
-                        extended[prop] = obj[prop];
+                    extended[prop] = obj[prop];
                 }
             }
         };
