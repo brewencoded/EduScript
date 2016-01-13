@@ -117,7 +117,7 @@ gulp.task('browser-sync', ['sass', 'js', 'html'], function () {
     gulp.watch('src/js/**/*.js', ['js-watch']);
     gulp.watch('src/scss/*.scss', ['sass']);
     gulp.watch('src/index.html', ['html']).on('change', browserSync.reload);
-    gulp.watch('tests/**/*.js', ['test']);
+    gulp.watch('spec/tests/**/*.js', ['test']);
 });
 
 // You can have selection or ajax by itself. Manipulation depends on selection.
