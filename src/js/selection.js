@@ -123,13 +123,16 @@ var $ = (function($) {
             existingElement = new Input(attrs, node);
         } else {
             if (content !== '' && content !== undefined) {
-                existingElement = new Element(tag, attrs, node, content);
+            	if(typeof content === 'object') {
+            		existingElement = new Element(tag, attrs, node, "");
+            	} else {
+                	existingElement = new Element(tag, attrs, node, content);
+                }
             } else {
                 existingElement = new Element(tag, attrs, node);
             }
 
         }
-        console.log(existingElement);
         return existingElement;
     }
 
@@ -224,7 +227,6 @@ var $ = (function($) {
                 if (elementOrString instanceof Element) {
                     this.node.appendChild(elementOrString.getNode());
                 } else if (elementOrString instanceof Node) {
-                    console.log(elementOrString);
                     this.node.appendChild(elementOrString);
                 } else {
                     throw new NotUseableHtmlObjectException('The value is not a valid html string, Node, or Element');
