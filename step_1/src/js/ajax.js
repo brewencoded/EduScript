@@ -38,7 +38,7 @@ var $ = (function($) {
         };
 
         xmlhttp.open(options.method, options.url, true);
-        xmlhttp.setRequestHeader("Content-Type", options.contentType | 'text/json');
+        xmlhttp.setRequestHeader("Content-Type", options.contentType || 'text/json');
         if(options.data && options.contentType) {
         	if(options.contentType === 'text/json') {
         		options.data = JSON.stringify(options.data);

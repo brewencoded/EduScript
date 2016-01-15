@@ -51,7 +51,6 @@ var $ = (function($) {
     function getAttrs(str) {
         var strippedTags = str.split('<')[1].split('>');
         var attrs = strippedTags[0].split(' ');
-        var i;
         var attrObj = {};
 
         attrs.shift();
@@ -150,11 +149,8 @@ var $ = (function($) {
         this.tag = tag;
         this.attrs = attrs;
         this.listeners = [];
-        if (node) {
-            this.node = node;
-        } else {
-            this.node = this.createNode();
-        }
+        this.node = node || this.createNode();
+
         if (content) {
             this.node.appendChild(document.createTextNode(content));
         }
@@ -290,7 +286,7 @@ var $ = (function($) {
      */
     function Input(attrs, node) {
         Element.call(this, 'input', attrs, node);
-        this.value = attrs.value | '';
+        this.value = attrs.value || '';
         Input.prototype.eventTypes = this.eventTypes.concat(['input', 'change']);
 
         this.node.addEventListener('keyup', function(e) {
@@ -366,6 +362,9 @@ var $ = (function($) {
             return findElement(str);
         }
     };
+    
+    //expose the prototype to allow for extending  
+    $.fn = Element.prototype;
 
     ////////////////////////////////////////////////////////////////////////////////////////////
     /// Test Code : stripped out during build
@@ -393,17 +392,17 @@ var $ = (function($) {
 
             var aArgs = Array.prototype.slice.call(arguments, 1),
                 fToBind = this,
-                fNOP = function() {},
+                FNOP = function() {},
                 fBound = function() {
-                    return fToBind.apply(this instanceof fNOP ? this : oThis,
+                    return fToBind.apply(this instanceof FNOP ? this : oThis,
                         aArgs.concat(Array.prototype.slice.call(arguments)));
                 };
 
             if (this.prototype) {
                 // native functions don't have a prototype
-                fNOP.prototype = this.prototype;
+                FNOP.prototype = this.prototype;
             }
-            fBound.prototype = new fNOP();
+            fBound.prototype = new FNOP();
 
             return fBound;
         };
