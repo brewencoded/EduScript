@@ -1,5 +1,5 @@
 {
-  "name": "EduScript Step 1",
+  "name": "eduscript_step_2",
   "version": "0.0.0",
   "description": "Recreation of small functionality in the jQuery library",
   "main": "index.html",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vrodriguez363/mimic.git"
+    "url": "git+https://github.com/vrodriguez363/EduScript.git"
   },
   "keywords": [
     "jQuery",

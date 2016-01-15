@@ -1,0 +1,23 @@
+{
+  "name": "eduscript_step_2",
+  "version": "0.0.0",
+  "description": "Recreation of small functionality in the jQuery library",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vrodriguez363/EduScript.git"
+  },
+  "keywords": [
+    "jQuery",
+    "JavaScript"
+  ],
+  "author": "Victor A. Rodriguez <vrodriguex5749@gmail.com> (https://github.com/vrodriguez363)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vrodriguez363/EduScript/issues"
+  },
+  "homepage": "https://github.com/vrodriguez363/EduScript/tree/master/step-2#readme"
+}
