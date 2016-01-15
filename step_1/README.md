@@ -1,4 +1,4 @@
-# mimic
+# Step 1
 Recreation of small functionality in the jQuery library. 
 
 ### About
@@ -13,7 +13,7 @@ This main learning points of this project are:
 * Build and test automation with Gulp.js
 * Code Conventions
 * Module Design Patterns and Classical Inheritance
-* Improving workflow (e.g. Sass, git)
+* JavaScript tools to improve workflow
 * Semantic Versioning (Eventually)
 * Continous Integration (Maybe)
 
@@ -28,7 +28,7 @@ npm install -g gulp
 
 Clone this repository and navigate into it 
 ``` 
-git clone https://github.com/vrodriguez363/mimic.git && cd mimic
+git clone https://github.com/vrodriguez363/EduScript.git && cd EduScript/step_1
 ```
 
 Now install with ` npm install `

@@ -1,5 +1,5 @@
 {
-  "name": "mimic",
+  "name": "EduScript Step 1",
   "version": "0.0.0",
   "description": "Recreation of small functionality in the jQuery library",
   "main": "index.html",
@@ -17,9 +17,9 @@
   "author": "Victor A. Rodriguez <vrodriguex5749@gmail.com> (https://github.com/vrodriguez363)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/vrodriguez363/mimic/issues"
+    "url": "https://github.com/vrodriguez363/EduScript/issues"
   },
-  "homepage": "https://github.com/vrodriguez363/mimic#readme",
+  "homepage": "https://github.com/vrodriguez363/EduScript/tree/master/step_1/#readme",
   "devDependencies": {
     "browser-sync": "^2.11.0",
     "gulp": "^3.9.0",
