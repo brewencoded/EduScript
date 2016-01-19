@@ -1,0 +1,12 @@
+{
+   "compilerOptions": {
+       "module": "commonjs",
+       "removeComments": true,
+       "target": "es5",
+       "noImplicitAny": true
+   },
+   "files": [
+       "./src/ts/main.ts",
+       "./src/ts/ajax.ts"
+   ]
+}
