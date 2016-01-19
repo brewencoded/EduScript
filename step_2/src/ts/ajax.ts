@@ -1,5 +1,4 @@
-module ExternalTest {
-    export class ExternalClass {
-        testProp: string;
-    }
+export function someFunction(message: string) {
+    let test = `Hello World ${message}`;
+    console.log(test);
 }

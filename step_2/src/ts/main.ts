@@ -1,5 +1,8 @@
-module TestModule {
-    class TestClass {
-        testProp: string;
-    }
-};
+import { someFunction } from "./ajax";
+
+(<any>window).Test = {
+    test: someFunction
+}
+
+
+
