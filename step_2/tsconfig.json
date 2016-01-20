@@ -6,6 +6,7 @@
        "noImplicitAny": true
    },
    "files": [
+       "./typings/**/*.ts",
        "./src/ts/main.ts",
        "./src/ts/ajax.ts"
    ]
