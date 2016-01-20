@@ -57,8 +57,8 @@ describe('selection', function() {
             $elem = $.elem('<div id="myId" class="myClass"></div>');
         });
 
-        it('should return an Element object', function() {
-            expect($elem).toEqual(jasmine.any($.test.Element));
+        it('should return an JElement object', function() {
+            expect($elem).toEqual(jasmine.any($.test.JElement));
         });
         describe('finding existing element', function() {
             var testElement, testElementTwo;
@@ -81,14 +81,14 @@ describe('selection', function() {
             });
             it('should find element on the page and create an Element', function() {
                 var result = $.elem('#testId');
-                expect(result).toEqual(jasmine.any($.test.Element));
+                expect(result).toEqual(jasmine.any($.test.JElement));
                 expect(result.getNode()).toEqual(jasmine.any(Node));
                 expect(testElement).toEqual(result.getNode());
             });
             it('should get an array for multiple elements', function() {
                 var result = $.elem('.myClass');
                 expect(result.length > 0).toBe(true);
-                expect(result[0]).toEqual(jasmine.any($.test.Element));
+                expect(result[0]).toEqual(jasmine.any($.test.JElement));
             });
             it('should pull in all attributes from existing element', function() {
                 var result = $.elem('#testId');
@@ -109,7 +109,7 @@ describe('selection', function() {
             });
         });
 
-        describe('Element', function() {
+        describe('JElement', function() {
             it('should create a node on instantiation', function() {
                 expect($elem.getNode()).toEqual(jasmine.any(Node));
             });
@@ -122,7 +122,7 @@ describe('selection', function() {
 
         describe('Input', function() {
             it('should have different event types', function() {
-                var e = new $.test.Element('div', {
+                var e = new $.test.JElement('div', {
                     class: 'myClass'
                 });
                 var i = new $.test.Input({
@@ -201,7 +201,7 @@ describe('selection', function() {
         		expect(div.getNode().childNodes[0]).toBeDefined();
         	});
 
-        	it('should append an Element to an html element', function () {
+        	it('should append an JElement to an html element', function () {
         		var appendee = $.elem('<p>Hello</p>');
         		div.append(appendee);
         		expect(div.getNode().childNodes[0]).toBeDefined();

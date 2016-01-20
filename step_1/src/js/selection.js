@@ -83,7 +83,7 @@ var $ = (function($) {
     /**
      * Searches DOM using CSS selectors
      * @param  {string} selector     - selector to use in search
-     * @return {Object|Object[]|false} Element or Element[] representing element(s) found or false if no match
+     * @return {Object|Object[]|false} JElement or JElement[] representing element(s) found or false if no match
      */
     function findElement(selector) {
         var results = document.querySelectorAll(selector);
@@ -105,7 +105,7 @@ var $ = (function($) {
     /**
      * Uses node to create Element
      * @param  {Object} node 	  - Node to use in object creation
-     * @return {Element|Input}      Input for input or select elements, Element for all others
+     * @return {JElement|Input}      Input for input or select elements, JElement for all others
      */
     function createExistingElement(node) {
         var tag = node.tagName;
@@ -123,12 +123,12 @@ var $ = (function($) {
         } else {
             if (content !== '' && content !== undefined) {
             	if(typeof content === 'object') {
-            		existingElement = new Element(tag, attrs, node, "");
+            		existingElement = new JElement(tag, attrs, node, "");
             	} else {
-                	existingElement = new Element(tag, attrs, node, content);
+                	existingElement = new JElement(tag, attrs, node, content);
                 }
             } else {
-                existingElement = new Element(tag, attrs, node);
+                existingElement = new JElement(tag, attrs, node);
             }
 
         }
@@ -145,7 +145,7 @@ var $ = (function($) {
      * @param {Object} attrs - map of attributes and values
      * @param {Object} node  - node to initialize object with
      */
-    function Element(tag, attrs, node, content) {
+    function JElement(tag, attrs, node, content) {
         this.tag = tag;
         this.attrs = attrs;
         this.listeners = [];
@@ -155,7 +155,7 @@ var $ = (function($) {
             this.node.appendChild(document.createTextNode(content));
         }
     }
-    Element.prototype = {
+    JElement.prototype = {
         eventTypes: ['click', 'blur', 'hover', 'keyup', 'focus', 'keydown', 'mouseup', 'mousedown', 'mouseleave', 'scroll'],
         /**
          * add event handler to element
@@ -220,7 +220,7 @@ var $ = (function($) {
 
             } else {
 
-                if (elementOrString instanceof Element) {
+                if (elementOrString instanceof JElement) {
                     this.node.appendChild(elementOrString.getNode());
                 } else if (elementOrString instanceof Node) {
                     this.node.appendChild(elementOrString);
@@ -272,7 +272,7 @@ var $ = (function($) {
         },
         /**
          * Removes the node from the DOM
-         * @return {Object} reference to the removedd object as an Element
+         * @return {Object} reference to the removedd object as a JElement
          */
         remove: function() {
             this.node.parentNode.removeChild(this.node);
@@ -281,11 +281,11 @@ var $ = (function($) {
         }
     };
     /**
-     * Constructor for Input type. Inherits from Element
+     * Constructor for Input type. Inherits from JElement
      * @param {Object} attrs - attributes to pass to parent
      */
     function Input(attrs, node) {
-        Element.call(this, 'input', attrs, node);
+        JElement.call(this, 'input', attrs, node);
         this.value = attrs.value || '';
         Input.prototype.eventTypes = this.eventTypes.concat(['input', 'change']);
 
@@ -296,7 +296,7 @@ var $ = (function($) {
     }
 
 
-    Input.prototype = Object.create(Element.prototype);
+    Input.prototype = Object.create(JElement.prototype);
     Input.prototype.constructor = Input;
 
     ////////////////////////////////////////////////////////////////////////////////////////////
@@ -337,7 +337,7 @@ var $ = (function($) {
     ////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Element creation or searching (does not yet support nested elements)
+     * JElement creation or searching (does not yet support nested elements)
      * @param  {string} str          - html string or selector
      * @return {Object|Object[]|false} one or more objects or false for search and Element if creating
      */
@@ -355,7 +355,7 @@ var $ = (function($) {
                 attrs = getAttrs(str);
                 content = getText(str);
 
-                return new Element(tag, attrs, null, content);
+                return new JElement(tag, attrs, null, content);
             }
         } else {
 
@@ -364,7 +364,7 @@ var $ = (function($) {
     };
     
     //expose the prototype to allow for extending  
-    $.fn = Element.prototype;
+    $.fn = JElement.prototype;
 
     ////////////////////////////////////////////////////////////////////////////////////////////
     /// Test Code : stripped out during build
@@ -377,7 +377,7 @@ var $ = (function($) {
         getTag: getTag,
         getAttrs: getAttrs,
         getText: getText,
-        Element: Element,
+        JElement: JElement,
         Input: Input,
         NoSuchEventException: NoSuchEventException
     };
