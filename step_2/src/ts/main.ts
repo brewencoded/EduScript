@@ -107,7 +107,6 @@ function findElement (selector: string): Object|Object[]|boolean {
 
         return multipleResults;
     } else {
-
         return createExistingElement(results[0]);
     }
 }
@@ -123,22 +122,23 @@ function createExistingElement(node: Element) {
     let content: string|Node = node.childNodes[0];
     let existingElement: JElement;
 
-    //borrow another method from Array prototype
+    // borrow another method from Array prototype
      Array.prototype.forEach.call(node.attributes, (attr: Attr) => {
          attrs.set(attr.name, attr.value);
      });
 
     if (tag === "input" || tag === "select") {
-        //existingElement = new Input(attrs, node);
+        existingElement = new Input(attrs, node);
     } else {
         if (content !== "" && content !== undefined) {
             if (typeof content === "object") {
-                //existingElement = new Element(tag, attrs, node, "");
-            } else {
-                //existingElement = new Element(tag, attrs, node, content);
+                existingElement = new JElement(tag, attrs, node, null);
+            }
+            if (typeof content === "string") {
+                existingElement = new JElement(tag, attrs, node, content);
             }
         } else {
-            //existingElement = new Element(tag, attrs, node);
+            existingElement = new JElement(tag, attrs, node, null);
         }
 
     }
@@ -167,12 +167,12 @@ class JElement {
     public node: Node;
     public content: string|Node;
     public prototype: Object = JElement.prototype;
-    public eventTypes: string[] = ['click', 'blur', 'hover', 'keyup', 'focus', 'keydown', 'mouseup', 'mousedown', 'mouseleave', 'scroll'];
+    public eventTypes: string[] = ["click", "blur", "hover", "keyup", "focus", "keydown", "mouseup", "mousedown", "mouseleave", "scroll"];
 
     constructor (tag: string, attrs: Map<string, string>, node: Node, content: string) {
         this.tag = tag;
         this.attrs = attrs;
-        this.node = node;
+        this.node = node || this.createNode();
         this.listeners = new Set<Listener>();
         if (content) {
             this.node.appendChild(document.createTextNode(content));
@@ -234,7 +234,7 @@ class JElement {
             return this.attrs.get(attr);
         }
     }
-    
+
     /**
      * Gets the node representation of the object
      * @return {Object} Node
@@ -322,7 +322,9 @@ class Input extends JElement {
  * @param  {string} str          - html string or selector
  * @return {Object|Object[]|false} one or more objects or false for search and Element if creating
  */
-function selectOrCreate(str: string|JElement|Element) {
+// JElement Factory
+ let jQuery: any = function (str: any): any {
+    // call the familiar jquery selector and creation method
     let attrs: Map<string, string>;
     let tag: string;
     let content: string;
@@ -338,29 +340,20 @@ function selectOrCreate(str: string|JElement|Element) {
 
             return new JElement(tag, attrs, null, content);
         }
-    } else if (typeof str === "string" && !!isHTML(str)) {
+    } else if (typeof str === "string" && isHTML(str) === false) {
         return findElement(str);
     } else {
-        // TODO: implement error
+        return {};
     }
 };
 
-// JElement Factory
-let jQuery: any = (<any>window).$ = (<any>window).jQuery;
-jQuery.fn = jQuery.prototype = {
-    constructor: jQuery,
-    length: 0,
-    init: selectOrCreate
-};
+jQuery.ajax = ajax;
+jQuery.get = get;
+jQuery.post = post;
 
-(<any>window).$ = function jQuery (selectOrCreate: any): any {
-    // call the familiar jquery selector and creation method
-    return  new jQuery.fn.init(selector);
-};
+// expose prototype
+jQuery.fn = JElement.prototype;
 
-
-
-
-(<any>window).$.ajax = ajax;
-(<any>window).$.get = get;
-(<any>window).$.post = post;
+// set window objects
+(<any>window).jQuery = jQuery;
+(<any>window).$ = jQuery;
