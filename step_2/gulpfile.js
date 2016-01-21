@@ -45,7 +45,9 @@ gulp.task('ts', function () {
         .pipe(gulp.dest('build/js'));
 });
 
-gulp.task('ts-watch', ['ts'], browserSync.reload);
+gulp.task('ts-watch', ['ts'], function () {
+    browserSync.reload();    
+});
 
 ///////////////////////////////////////////////////
 /// Sass
