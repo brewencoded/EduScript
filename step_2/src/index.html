@@ -2,10 +2,29 @@
 <html lang="en">
 <head>
 	<title>Mimic Demo</title>
+    <link rel="stylesheet" type="text/css" href="css/style.min.css">
 </head>
 <body>
-	<h1 class="header" id="myId">Mimic Demo</h1>
-	<div class="content"></div>
+    <header class="col-md-12">
+        <h1 class="header col-md-4 offset-md-4" id="myId">Mimic Demo</h1>
+    </header>
+	
+	<div class="content col-md-12"></div>
 	<script src="js/app.js"></script>
+    <script>
+        var content = $('.content');
+		//append Element 
+		var main = $('<div class="main">In div.main</div>');
+		content.append(main);
+		//apend HTML string
+		content.append('<p>In p</p>');
+		//append Node
+		var div = document.createElement('div');
+		div.setAttribute('class', 'someDiv');
+		div.appendChild(document.createTextNode('In div.someDiv'));
+		content.append(div);
+
+		$('.someDiv').append('<p>In div.someDiv p</p>');
+    </script>
 </body>
 </html>

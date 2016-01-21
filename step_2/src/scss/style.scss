@@ -1,2 +1,24 @@
+/////////////////////////////////////////
+// Imports / Utilities
+/////////////////////////////////////////
 @import "_reset.scss";
-@import "_globals.scss";
+@import "_variables";
+@import "_text.scss";
+@import "_columns.scss";
+
+/////////////////////////////////////////
+// Page Styles
+/////////////////////////////////////////
+@for $i from 1 through 6 {
+    h#{$i} {
+        text-align: center;
+    }
+}
+
+header {
+    background-color: #E0E0E0;
+}
+.content {
+    padding-top: 1em;
+    text-align: center;
+}

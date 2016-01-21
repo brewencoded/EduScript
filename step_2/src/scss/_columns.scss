@@ -1,0 +1,54 @@
+
+/*----- Columns -----*/
+$columns: 12;
+$media: (
+  xlrg: 1199px,
+  lrg: 991px,
+  md: 767px,
+  sm: 479px,
+  xs: 319px
+);
+
+@mixin col(){
+    @each $size, $width in $media{
+        @for $col from 1 through $columns{
+            .col-#{$size}-#{$col}{
+                width: unquote($col * 100 / $columns +"%"); 
+                display: block;
+                float: left;
+                padding: 0 10px;
+                box-sizing: border-box;
+                @media only screen and (max-width: #{$width}) {
+                    width: 100%; 
+                };
+            }
+    
+            .offset-#{$size}-#{$col}{
+                margin-left: unquote($col * 100 / $columns +"%");
+                @media only screen and (max-width: #{$width}) {
+                    margin-left: 0px; 
+                };
+            }
+        }
+        
+        .hide-#{$size}{
+            display: block;
+            @media only screen and (max-width: #{$width}) {
+               display: none; 
+            };
+        }
+        .show-#{$size}{
+            display: none;
+            @media only screen and (max-width: #{$width}) {
+               display: block; 
+            };
+        }
+    }
+}
+
+.row{
+    width: 100%;
+    overflow: hidden;
+}
+
+@include col();

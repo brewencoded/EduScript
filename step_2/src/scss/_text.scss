@@ -1,0 +1,34 @@
+ // Font decloration mixin
+@mixin font($text-size, $family){
+    font-size: $text-size;
+    line-height: 1.5;
+    font-family: $family;
+}
+
+a{
+    text-decoration: none;   
+}
+
+.center-text{
+    text-align: center;   
+}
+
+p{
+    @include font(1.125em, $font-family);
+    padding: 20px 0;
+}
+
+h1{
+    @include font(3em, $secondary-font-family);
+    font-weight: bold;
+    
+}
+
+h2{
+    @include font(2em, $secondary-font-family);
+}
+
+h3{
+    @include font(1.66em, $secondary-font-family);
+    color: color(third, base);
+}
