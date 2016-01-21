@@ -314,7 +314,7 @@ class Input extends JElement {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
-/// Inititializers
+/// Inititializer
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -347,6 +347,35 @@ class Input extends JElement {
     }
 };
 
+ ////////////////////////////////////////////////////////////////////////////////////////////
+/// Public Utility Functions
+////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * Variadic function. Takes multiple objects and combines them into a single  object. shallow merge.
+ * @return {Object} merged objects
+ */
+jQuery.extend = function() {
+
+    // Variables
+    let extended: any = <any>{}; // must be of type any
+    let length = arguments.length; // arguments has pretty bad performance, don't overuse it
+    // Merge the object into the extended object
+    let merge = function(obj: any) {
+        for (let prop in obj) {
+            if (Object.prototype.hasOwnProperty.call(obj, prop)) {
+                extended[prop] = obj[prop];
+            }
+        }
+    };
+
+    // Loop through each object and conduct a merge
+    for (let i = 0; i < length; i++) {
+        let obj = arguments[i];
+        merge(obj);
+    }
+
+    return extended;
+};
 jQuery.ajax = ajax;
 jQuery.get = get;
 jQuery.post = post;
@@ -354,6 +383,23 @@ jQuery.post = post;
 // expose prototype
 jQuery.fn = JElement.prototype;
 
+////////////////////////////////////////////////////////////////////////////////////////////
+/// Test Code : stripped out during build
+////////////////////////////////////////////////////////////////////////////////////////////
+
+/* start-test */
+jQuery.test = {
+    isHTML: isHTML,
+    getTag: getTag,
+    getAttrs: getAttrs,
+    getText: getText,
+    JElement: JElement,
+    Input: Input,
+    NoSuchEventException: NoSuchEventException
+};
+/* end-test */
+
 // set window objects
 (<any>window).jQuery = jQuery;
 (<any>window).$ = jQuery;
+

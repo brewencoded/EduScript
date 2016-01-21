@@ -23,13 +23,13 @@ var gulp = require('gulp'),
 ///////////////////////////////////////////////////
 var src = {
         ts: 'src/ts',
-        sass: '',
-        index: ''
+        sass: 'src/scss/style.scss',
+        index: 'src/index.html'
     },
     dest = {
         js: 'build/js',
-        css: '',
-        index: ''
+        css: 'build/css',
+        index: 'build'
     };
 
 ///////////////////////////////////////////////////
@@ -42,7 +42,7 @@ gulp.task('ts', function () {
         
     return bundler.bundle()
         .pipe(source('app.js'))
-        .pipe(gulp.dest('build/js'));
+        .pipe(gulp.dest(dest.js));
 });
 
 gulp.task('ts-watch', ['ts'], function () {
@@ -50,10 +50,20 @@ gulp.task('ts-watch', ['ts'], function () {
 });
 
 ///////////////////////////////////////////////////
+/// Test
+///////////////////////////////////////////////////
+gulp.task('test', ['ts'], function (done) {
+	new Server({
+        configFile: __dirname + '/karma.conf.js',
+        singleRun: true
+    }, done).start();
+});
+
+///////////////////////////////////////////////////
 /// Sass
 ///////////////////////////////////////////////////
 gulp.task('sass', function () {
-    return gulp.src('src/scss/style.scss')
+    return gulp.src(src.sass)
         .pipe(plumber())
         .pipe(sourcemaps.init())
         .pipe(sass())
@@ -61,7 +71,7 @@ gulp.task('sass', function () {
         .pipe(minify())
         .pipe(rename('style.min.css'))
         .pipe(sourcemaps.write('maps'))
-        .pipe(gulp.dest('build/css'))
+        .pipe(gulp.dest(dest.css))
         .pipe(browserSync.stream());
 });
 
@@ -69,21 +79,21 @@ gulp.task('sass', function () {
 /// HTML
 ///////////////////////////////////////////////////
 gulp.task('html', function () {
-    return gulp.src('src/index.html')
+    return gulp.src(src.index)
         .pipe(plumber())
-        .pipe(gulp.dest('build/'));
+        .pipe(gulp.dest(dest.index));
 });
 
 ///////////////////////////////////////////////////
 /// Watch and live reload
 ///////////////////////////////////////////////////
-gulp.task('browser-sync', ['sass', 'ts', 'html'], function () {
+gulp.task('browser-sync', ['sass', 'test', 'html'], function () {
     browserSync.init({
         server: './build',
         port: 8087
     });
 
-    gulp.watch('src/ts/**/*.ts', ['ts-watch']);
+    gulp.watch(['src/ts/**/*.ts', 'spec/**/*'], ['test']);
     gulp.watch('src/scss/*.scss', ['sass']);
     gulp.watch('src/index.html', ['html']).on('change', browserSync.reload);
 });
