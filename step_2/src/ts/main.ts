@@ -1,4 +1,4 @@
-/// <reference path="../../typings/es6.d.ts" />
+/// <reference path="../../node_modules/typescript/lib/lib.es6.d.ts" />
 
 import { ajax, get, post, BaseError } from "./ajax";
 
