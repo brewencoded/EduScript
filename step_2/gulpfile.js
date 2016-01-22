@@ -16,7 +16,8 @@ var gulp = require('gulp'),
     yargs = require('yargs').argv,
     source = require('vinyl-source-stream'),
     browserify = require('browserify'),
-    tsify = require('tsify');
+    tsify = require('tsify'),
+    babelify = require('babelify');
 
 ///////////////////////////////////////////////////
 /// Constants
@@ -31,6 +32,7 @@ var src = {
         css: 'build/css',
         index: 'build'
     };
+var extensions = ['.js', '.ts', '.json'];
 
 ///////////////////////////////////////////////////
 /// TypeScript
@@ -38,11 +40,28 @@ var src = {
 gulp.task('ts', function () {
     var bundler = browserify()
         .add(src.ts + '/main.ts')
-        .plugin(tsify);
+        .plugin(tsify)
+        .transform(babelify.configure({
+            extensions: extensions,
+            presets: ['es2015']
+        }));
         
     return bundler.bundle()
         .pipe(source('app.js'))
         .pipe(gulp.dest(dest.js));
+});
+
+gulp.task('ts-watch', ['ts'], function () {
+    browserSync.reload();    
+});
+
+///////////////////////////////////////////////////
+/// JavaScript Libraries / Polyfills
+///////////////////////////////////////////////////
+gulp.task('js', function () {
+    return gulp.src('src/js/**/*.js')
+        .pipe(concatenate('lib.js'))
+        .pipe(gulp.dest('build/js'));
 });
 
 gulp.task('ts-watch', ['ts'], function () {
@@ -87,7 +106,7 @@ gulp.task('html', function () {
 ///////////////////////////////////////////////////
 /// Watch and live reload
 ///////////////////////////////////////////////////
-gulp.task('browser-sync', ['sass', 'test', 'html'], function () {
+gulp.task('browser-sync', ['sass', 'test', 'js', 'html'], function () {
     browserSync.init({
         server: './build',
         port: 8087

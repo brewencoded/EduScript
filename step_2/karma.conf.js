@@ -6,7 +6,7 @@ module.exports = function(config) {
         reporters: ['spec'],
         browsers: ['PhantomJS'],
         files: [
-            'polyfills.js',
+            'build/js/lib.js',
             'build/js/app.js',
             'spec/tests/*.js', {
                 pattern: 'spec/fixtures/*.json',
