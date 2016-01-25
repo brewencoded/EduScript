@@ -1,14 +1,14 @@
 describe('selection', function() {
-    function click(el) {
+    function click(el) { // Need a click event for phantomJS
         var ev = document.createEvent("MouseEvent");
         ev.initMouseEvent(
             "click",
-            true /* bubble */ , 
-            true /* cancelable */ ,
+            true, // bubble
+            true, // cancelable
             window, null,
-            0, 0, 0, 0, /* coordinates */
-            false, false, false, false, /* modifier keys */
-            0 /*left*/ , 
+            0, 0, 0, 0, // coordinates
+            false, false, false, false, // modifier keys
+            0, // left 
             null
         );
         el.dispatchEvent(ev);

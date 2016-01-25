@@ -376,9 +376,11 @@ jQuery.extend = function() {
 
     return extended;
 };
+/* start-ajax */
 jQuery.ajax = ajax;
 jQuery.get = get;
 jQuery.post = post;
+/* end-ajax */
 
 // expose prototype
 jQuery.fn = JElement.prototype;
